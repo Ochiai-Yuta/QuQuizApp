@@ -1,3 +1,4 @@
+//これはマルバツクイズのアプリです//
 package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
