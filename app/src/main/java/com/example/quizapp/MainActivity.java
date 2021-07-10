@@ -2,6 +2,8 @@
 //みんなで作ろう//
 package com.example.quizapp;
 
+//import
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
