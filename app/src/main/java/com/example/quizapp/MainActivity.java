@@ -1,5 +1,6 @@
 //これはマルバツクイズのアプリです//
 //みんなで作ろう//
+//わーい//
 package com.example.quizapp;
 
 //import
