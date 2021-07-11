@@ -1,9 +1,5 @@
-//これはマルバツクイズのアプリです//
-//みんなで作ろう//
-//わーい//
+//Part1 branch
 package com.example.quizapp;
-
-//import
 
 import androidx.appcompat.app.AppCompatActivity;
 
