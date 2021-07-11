@@ -1,4 +1,3 @@
-//Part1 branch
 package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
