@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">QuizApp</string>
+    <string name="button">Button</string>
+    <string name="text">"abcd123456789cdefg\n1234567893456978
+        \nhijklmnopq012698745rst4565848uvwxlmnopqffsjldalkdfasdfks
+        \n\n\n\n\n\n012698745rst4565848asdf\nuvwx"</string>
 </resources>
