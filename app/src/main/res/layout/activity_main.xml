@@ -8,7 +8,8 @@
     android:background="#FFFFFF"
     tools:context=".MainActivity">
 
-    <com.example.quizapp.MyView
+<!--    StartLayout.javaの描画＆設定-->
+    <com.example.quizapp.StartLayout
         android:layout_width="340dp"
         android:layout_height="420dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/label"
+        android:id="@+id/startLabel"
         android:textSize="90sp"
         android:textColor="#000"
         android:layout_marginStart="100dp"

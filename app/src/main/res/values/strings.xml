@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">QuizApp</string>
+<!--    activity_main.xml-->
     <string name="button">ハジメ</string>
     <string name="text">"クイズ"</string>
+<!--    activity_quiz.xml-->
+    <string name="quiz_text">サザエさん一家のカツオ君は、タラちゃんと兄弟である。</string>
+    <string name="circle_button">マル</string>
+    <string name="cross_button">バツ</string>
 </resources>
