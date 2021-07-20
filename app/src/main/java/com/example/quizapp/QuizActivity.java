@@ -1,6 +1,7 @@
 package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -8,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
@@ -18,17 +21,41 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
     }
 
-    public void onTapEvent(View view) {
-        //finish();
-        Intent intent = new Intent(this, CorrectActivity.class);
-        intent.putExtra("Answer", "マル");
-        startActivity(intent);
+    public void tapCircleButton(View view){
+        //judgeViewの子ビューをすべて非表示にする
+        FrameLayout frame = findViewById(R.id.judgeView);
+
+        ImageFilterView tmp;
+
+        for(int i=0; i<frame.getChildCount(); i++){
+            tmp = (ImageFilterView)frame.getChildAt(i);
+            tmp.setVisibility(View.INVISIBLE);
+        }
+
+        //マルを表示
+        ImageFilterView CircleImage = findViewById(R.id.circleImage);
+        CircleImage.setVisibility(View.VISIBLE);
+
+        TextView quizText = findViewById(R.id.quizText);
+        quizText.setText("まる");
     }
 
-    public void onTapEvent2(View view) {
-        //finish();
-        Intent intent = new Intent(this, CorrectActivity.class);
-        intent.putExtra("Answer", "バツ");
-        startActivity(intent);
+    public void tapCrossButton(View view){
+        //judgeViewの子ビューをすべて非表示にする
+        FrameLayout frame = findViewById(R.id.judgeView);
+
+        ImageFilterView tmp;
+
+        for(int i=0; i<frame.getChildCount(); i++){
+            tmp = (ImageFilterView)frame.getChildAt(i);
+            tmp.setVisibility(View.INVISIBLE);
+        }
+
+        //バツを表示
+        ImageFilterView CrossImage = findViewById(R.id.crossImage);
+        CrossImage.setVisibility(View.VISIBLE);
+
+        TextView quizText = findViewById(R.id.quizText);
+        quizText.setText("ばつ");
     }
 }
