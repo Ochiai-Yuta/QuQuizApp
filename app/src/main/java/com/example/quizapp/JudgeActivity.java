@@ -18,13 +18,9 @@ public class JudgeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_judge);
 
-        // Get the Intent that started this activity and extract the string
+        //インテントからSELECT_MESSAGEを受け取る
         Intent intent = getIntent();
         String message = intent.getStringExtra(QuizActivity.SELECT_MESSAGE);
-
-        // Capture the layout's TextView and set the string as its text
-        TextView textView = findViewById(R.id.example);
-        textView.setText(message);
 
         //フレーム内を全て非表示
         FrameLayout frame = findViewById(R.id.circleORcrossLayout);
@@ -34,16 +30,28 @@ public class JudgeActivity extends AppCompatActivity {
             tmp.setVisibility(View.INVISIBLE);
         }
 
-        //丸を表示
+        //SELECT_MESSAGE==circleの場合、丸を表示
         if(messageCircle.equals(message)){
             View paint = findViewById(R.id.circlePaint);
             paint.setVisibility(View.VISIBLE);
         }
 
-        //バツを表示
+        //SELECT_MESSAGE==crossの場合、バツを表示
         if(messageCross.equals(message)){
             View paint = findViewById(R.id.crossPaint);
             paint.setVisibility(View.VISIBLE);
         }
+    }
+
+    //戻るボタンの無効化
+    @Override
+    public void onBackPressed() {
+    }
+
+    /**次へボタンをタップされたときの挙動**/
+    public void tapNextButton(View view){
+        Intent intent = new Intent(this, EndActivity.class);
+        //end画面に切り替え
+        startActivity(intent);
     }
 }

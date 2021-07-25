@@ -10,13 +10,15 @@ public class QuizActivity extends AppCompatActivity {
     //マルバツの選択を格納する
     public static String SELECT_MESSAGE = "com.example.quizapp.MESSAGE";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        //startTimer();
+    }
 
+    //戻るボタンの無効化
+    @Override
+    public void onBackPressed() {
     }
 
     /**丸ボタンをタップされたときの挙動**/

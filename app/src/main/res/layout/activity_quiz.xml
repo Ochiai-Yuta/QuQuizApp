@@ -7,7 +7,7 @@
     tools:context=".QuizActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/quizStatusLayout_quiz"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -21,14 +21,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/quizCountText_quiz"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/quiz_count" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/timerText_quiz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -36,17 +36,17 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/quizTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="24dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/answerButtonLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/quizStatusLayout_quiz">
 
         <TextView
             android:id="@+id/quizText"
@@ -58,7 +58,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/answerButtonLayout"
         android:layout_width="412dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.utils.widget.ImageFilterButton
-            android:id="@+id/imageFilterButton"
+            android:id="@+id/circleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="tapCircleButton"
@@ -80,7 +80,7 @@
             android:layout_height="30dp" />
 
         <androidx.constraintlayout.utils.widget.ImageFilterButton
-            android:id="@+id/imageFilterButton2"
+            android:id="@+id/crossButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="tapCrossButton"

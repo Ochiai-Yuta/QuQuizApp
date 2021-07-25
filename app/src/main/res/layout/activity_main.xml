@@ -8,8 +8,8 @@
     android:background="#FFFFFF"
     tools:context=".MainActivity">
 
-<!--    StartLayout.javaの描画＆設定-->
-    <com.example.quizapp.StartLayout
+<!--    StartPaint.javaの描画＆設定-->
+    <com.example.quizapp.StartPaint
         android:layout_width="340dp"
         android:layout_height="420dp"
         app:layout_constraintBottom_toBottomOf="parent"
