@@ -1,0 +1,29 @@
+{
+  "quiz": [
+    {
+      "id": 1,
+      "quizText": "サザエさん一家のカツオ君はタラちゃんの兄弟である",
+      "answer": "cross"
+    },
+    {
+      "id": 2,
+      "quizText": "お正月に飾るのは門松である",
+      "answer": "circle"
+    },
+    {
+      "id": 3,
+      "quizText": "東京都庁は千代田区にある",
+      "answer": "cross"
+    },
+    {
+      "id": 4,
+      "quizText": "赤ちゃんの骨の数は大人より多い",
+      "answer": "circle"
+    },
+    {
+      "id": 5,
+      "quizText": "パンダのしっぽは黒い",
+      "answer": "cross"
+    }
+  ]
+}
