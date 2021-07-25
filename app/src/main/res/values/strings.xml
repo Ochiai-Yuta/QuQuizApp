@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">QuizApp</string>
+    <string name="button">ハジメ</string>
+    <string name="text">"クイズ"</string>
+    <string name="quiz_text">サザエさん一家のカツオ君は、タラちゃんと兄弟である。</string>
+    <string name="circle_button">マル</string>
+    <string name="cross_button">バツ</string>
+    <string name="timer_count">01:23</string>
+    <string name="quiz_count">2/5</string>
+    <string name="next_button">次へ</string>
+    <string name="again_button">もう一度</string>
+    <string name="correct_count">3/5</string>
 </resources>
