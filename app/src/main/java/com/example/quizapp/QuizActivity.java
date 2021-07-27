@@ -14,6 +14,11 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        //MainActivityから受け取ったintentをgetする。
+        Intent intent = getIntent();
+        //intentに付いてきた、”QUIZ_LIST”のKeyを持つ要素をQUIZ_LISTに格納する。
+        MainActivity.QuizAtrr QUIZ_LIST = (MainActivity.QuizAtrr) intent.getSerializableExtra("QUIZ_LIST");
     }
 
     //戻るボタンの無効化
