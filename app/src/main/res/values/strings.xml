@@ -10,4 +10,8 @@
     <string name="next_button">次へ</string>
     <string name="again_button">もう一度</string>
     <string name="correct_count">3/5</string>
+    <string name="description1">selected bag</string>
+    <string name="question">どのバッグにしますか？</string>
+    <string name="description2">bag1</string>
+    <string name="description3">bag2</string>
 </resources>
