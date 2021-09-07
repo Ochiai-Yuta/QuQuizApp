@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class QuizActivity extends AppCompatActivity {
     //マルバツの選択を格納する
     private int COUNT = 0;
+    private static int TOTAL_NUMBER = 0;
 
     public static String SELECT_MESSAGE = "com.example.quizapp.MESSAGE";
     public static ArrayList<MainActivity.QuizAtrr> QUIZ_LIST = new ArrayList<>();
@@ -42,6 +43,7 @@ public class QuizActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //intentに付いてきた、”QUIZ_LIST”のKeyを持つ要素をQUIZ_LISTに格納する。
         QUIZ_LIST = (ArrayList<MainActivity.QuizAtrr>) intent.getSerializableExtra("QUIZ_LIST");
+        TOTAL_NUMBER = QUIZ_LIST.size();
 
         printQuiz(QUIZ_LIST, COUNT);
     }
@@ -55,6 +57,10 @@ public class QuizActivity extends AppCompatActivity {
     public void printQuiz(ArrayList<MainActivity.QuizAtrr> list, int n){
         TextView quiz = findViewById(R.id.quizText);
         quiz.setText(list.get(n).quiz_text);
+
+        //問題番号を更新
+        TextView text = findViewById(R.id.quizCountText_quiz);
+        text.setText(n+1 + "/" + QUIZ_LIST.size());
     }
 
     /**丸ボタンをタップされたときの挙動**/
@@ -63,13 +69,13 @@ public class QuizActivity extends AppCompatActivity {
         if("circle".equals(QUIZ_LIST.get(COUNT).answer_text)) {
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new CorrectDialogFragment(++COUNT);
+            dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
             dialogFragment.show(flagmentManager, "test alert dialog");
         }
         else{
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new IncorrectDialogFragment(++COUNT);
+            dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
             dialogFragment.show(flagmentManager, "incorrect dialog");
         }
     }
@@ -80,13 +86,13 @@ public class QuizActivity extends AppCompatActivity {
         if("circle".equals(QUIZ_LIST.get(COUNT).answer_text)) {
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new CorrectDialogFragment(++COUNT);
+            dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
             dialogFragment.show(flagmentManager, "test alert dialog");
         }
         else{
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new IncorrectDialogFragment(++COUNT);
+            dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
             dialogFragment.show(flagmentManager, "incorrect dialog");
         }
     }
@@ -101,14 +107,30 @@ public class QuizActivity extends AppCompatActivity {
         printQuiz(QUIZ_LIST, ++COUNT);
     }
 
+    private boolean endCheck(int count, int total) {
+        if(count >= total){
+            return false;
+        }
+
+        return true;
+    }
+
+    private void toEndActivity(){
+        Intent intent = new Intent(this, EndActivity.class);
+        //end画面に切り替え
+        startActivity(intent);
+    }
+
     public static class CorrectDialogFragment extends DialogFragment{
         static int count;
         AlertDialog dialog;
         AlertDialog.Builder alert;
         View alertView;
+        boolean endFlag = false;
 
-        CorrectDialogFragment(int count){
+        CorrectDialogFragment(int count, boolean endFlag){
             this.count = count;
+            this.endFlag = endFlag;
         }
 
         @Override
@@ -130,13 +152,25 @@ public class QuizActivity extends AppCompatActivity {
             circle.setVisibility(View.VISIBLE);
 
             Button next = alertView.findViewById(R.id.nextButton);
-            next.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
-                    Log.d("debug", "bag1 clicked");
-                    printNextQuiz(count);
-                    getDialog().dismiss();
-                }
-            });
+            if(endFlag) {
+                next.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.d("debug", "bag1 clicked");
+                        printNextQuiz(count);
+                        getDialog().dismiss();
+                    }
+                });
+            }
+            else{
+                next.setText("結果発表");
+                next.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        QuizActivity Activity = (QuizActivity) getActivity();
+                        getDialog().dismiss();
+                        Activity.toEndActivity();
+                    }
+                });
+            }
 
             alert.setView(alertView);
 
@@ -159,9 +193,11 @@ public class QuizActivity extends AppCompatActivity {
         AlertDialog dialog;
         AlertDialog.Builder alert;
         View alertView;
+        boolean endFlag = false;
 
-        IncorrectDialogFragment(int count){
+        IncorrectDialogFragment(int count, boolean endFlag){
             this.count = count;
+            this.endFlag = endFlag;
         }
 
         @Override
@@ -183,13 +219,25 @@ public class QuizActivity extends AppCompatActivity {
             cross.setVisibility(View.VISIBLE);
 
             Button next = alertView.findViewById(R.id.nextButton);
-            next.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
-                    Log.d("debug", "bag1 clicked");
-                    printNextQuiz(count);
-                    getDialog().dismiss();
-                }
-            });
+            if(endFlag) {
+                next.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.d("debug", "bag1 clicked");
+                        printNextQuiz(count);
+                        getDialog().dismiss();
+                    }
+                });
+            }
+            else{
+                next.setText("結果発表");
+                next.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        QuizActivity Activity = (QuizActivity) getActivity();
+                        getDialog().dismiss();
+                        Activity.toEndActivity();
+                    }
+                });
+            }
 
             alert.setView(alertView);
 
@@ -201,6 +249,7 @@ public class QuizActivity extends AppCompatActivity {
 
         private void printNextQuiz(int count) {
             QuizActivity Activity = (QuizActivity) getActivity();
+            //次の問題を表示
             if(Activity != null) {
                 Activity.printQuiz(QUIZ_LIST, count);
             }
