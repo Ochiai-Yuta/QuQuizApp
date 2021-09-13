@@ -94,22 +94,25 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
+    //クイズの終了を判定(クイズが終了ならばfalseを返す)
     private boolean endCheck(int count, int total) {
         return count < total;
     }
 
+    //EndActivityに切り替える
     private void toEndActivity(){
         Intent intent = new Intent(this, EndActivity.class);
         //end画面に切り替え
         startActivity(intent);
     }
 
+    //正解したときに表示するAlertDialog
     public static class CorrectDialogFragment extends DialogFragment{
-        int count;
         AlertDialog dialog;
         AlertDialog.Builder alert;
         View alertView;
-        boolean endFlag;
+        int count;      //次の問題番号
+        boolean endFlag;    //クイズの終了を判定
 
         CorrectDialogFragment(int count, boolean endFlag){
             this.count = count;
@@ -122,19 +125,24 @@ public class QuizActivity extends AppCompatActivity {
             alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("正解！");
 
+            //レイアウトの取得
             if(getActivity() != null){
                 alertView = getActivity().getLayoutInflater().inflate(R.layout.alert_layout, null);
             }
 
+            //レイアウト内のマルバツ表示を非表示にする
             FrameLayout frame = alertView.findViewById(R.id.circleORcrossLayout);
             for(int i=0; i<frame.getChildCount(); i++){
                 frame.getChildAt(i).setVisibility(View.INVISIBLE);
             }
 
+            //マルを表示
             View circle = frame.findViewById(R.id.circlePaint);
             circle.setVisibility(View.VISIBLE);
 
+            //次へボタンをタップされたときの挙動
             Button next = alertView.findViewById(R.id.nextButton);
+            //クイズが続く場合
             if(endFlag) {
                 next.setOnClickListener(v -> {
                     Log.d("debug", "bag1 clicked");
@@ -142,23 +150,25 @@ public class QuizActivity extends AppCompatActivity {
                     getDialog().dismiss();
                 });
             }
+            //クイズが終了する場合
             else{
                 next.setText("結果発表");
                 next.setOnClickListener(v -> {
                     QuizActivity Activity = (QuizActivity) getActivity();
                     getDialog().dismiss();
+                    //EndActivityへ切り替える
                     Activity.toEndActivity();
                 });
             }
 
             alert.setView(alertView);
-
             dialog = alert.create();
             dialog.show();
 
             return dialog;
         }
 
+        //printQuizを呼び出す
         private void printNextQuiz(int count) {
             QuizActivity Activity = (QuizActivity) getActivity();
             if(Activity != null) {
@@ -167,12 +177,13 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
+    //不正解したときに表示するAlertDialog
     public static class IncorrectDialogFragment extends DialogFragment{
-        int count;
         AlertDialog dialog;
         AlertDialog.Builder alert;
         View alertView;
-        boolean endFlag;
+        int count;      //次の問題番号
+        boolean endFlag;    //クイズの終了を判定
 
         IncorrectDialogFragment(int count, boolean endFlag){
             this.count = count;
@@ -185,19 +196,24 @@ public class QuizActivity extends AppCompatActivity {
             alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("不正解");
 
+            //レイアウトの取得
             if(getActivity() != null){
                 alertView = getActivity().getLayoutInflater().inflate(R.layout.alert_layout, null);
             }
 
+            //レイアウト内のマルバツ表示を非表示にする
             FrameLayout frame = alertView.findViewById(R.id.circleORcrossLayout);
             for(int i=0; i<frame.getChildCount(); i++){
                 frame.getChildAt(i).setVisibility(View.INVISIBLE);
             }
 
+            //バツを表示
             View cross = frame.findViewById(R.id.crossPaint);
             cross.setVisibility(View.VISIBLE);
 
+            //次へボタンをタップされたときの挙動
             Button next = alertView.findViewById(R.id.nextButton);
+            //クイズが続く場合
             if(endFlag) {
                 next.setOnClickListener(v -> {
                     Log.d("debug", "bag1 clicked");
@@ -205,23 +221,25 @@ public class QuizActivity extends AppCompatActivity {
                     getDialog().dismiss();
                 });
             }
+            //クイズが終了する場合
             else{
                 next.setText("結果発表");
                 next.setOnClickListener(v -> {
                     QuizActivity Activity = (QuizActivity) getActivity();
                     getDialog().dismiss();
+                    //EndActivityへ切り替える
                     Activity.toEndActivity();
                 });
             }
 
             alert.setView(alertView);
-
             dialog = alert.create();
             dialog.show();
 
             return dialog;
         }
 
+        //printQuizを呼び出す
         private void printNextQuiz(int count) {
             QuizActivity Activity = (QuizActivity) getActivity();
             //次の問題を表示
