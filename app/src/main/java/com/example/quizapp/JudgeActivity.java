@@ -12,15 +12,18 @@ public class JudgeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final String messageCircle = "circle";
-        final String messageCross = "cross";
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_judge);
 
         //インテントからSELECT_MESSAGEを受け取る
         Intent intent = getIntent();
-        String message = intent.getStringExtra(QuizActivity.SELECT_MESSAGE);
+        String select = intent.getStringExtra(QuizActivity.SELECT_MESSAGE);
+        String answer = intent.getStringExtra(QuizActivity.ANSWER_MESSAGE);
+        int count = intent.getIntExtra(QuizActivity.COUNT_MESSAGE, 99);
+        int size = intent.getIntExtra(QuizActivity.SIZE_MESSAGE, 99);
+
+        TextView quizCountText = findViewById(R.id.quizCountText_judge);
+        quizCountText.setText(count + " / " + size + " / " + select + " / "  + answer);
 
         //フレーム内を全て非表示
         FrameLayout frame = findViewById(R.id.circleORcrossLayout);
@@ -30,17 +33,18 @@ public class JudgeActivity extends AppCompatActivity {
             tmp.setVisibility(View.INVISIBLE);
         }
 
-        //SELECT_MESSAGE==circleの場合、丸を表示
-        if(messageCircle.equals(message)){
-            View paint = findViewById(R.id.circlePaint);
-            paint.setVisibility(View.VISIBLE);
-        }
 
-        //SELECT_MESSAGE==crossの場合、バツを表示
-        if(messageCross.equals(message)){
-            View paint = findViewById(R.id.crossPaint);
-            paint.setVisibility(View.VISIBLE);
+        View paint;
+        if(select.equals(answer)){
+            //SELECT_MESSAGE==circleの場合、丸を表示
+            paint = findViewById(R.id.circlePaint);
         }
+        else{
+            //SELECT_MESSAGE==crossの場合、バツを表示
+            paint = findViewById(R.id.crossPaint);
+        }
+        paint.setVisibility(View.VISIBLE);
+
     }
 
     //戻るボタンの無効化

@@ -57,9 +57,6 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(count);
 
             for(int n=0; n<count; n++) {
-                //エミュレータ起動させて、下の”▶ Run”のタブを開くと、出力が見られるよ
-                System.out.println("count:"+n);
-
                 //n番目の配列の要素をJobjectとする。
                 JSONObject Jobject = JsonArray.getJSONObject(n);
 
@@ -70,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
                 //ArrayListに取り出した値を格納する。
                 QUIZ_ATRR.add(new QuizAtrr(id , quiz_text, answer_text));
-
-                //エミュレータ起動させて、下の”▶ Run”のタブを開くと、出力が見られるよ
-                System.out.println(QUIZ_ATRR.get(QUIZ_ATRR.size() - 1).getQuiz_text());
             }
         }catch (JSONException JE){
             //tryでエラーが出るとアプリを強制終了する。
