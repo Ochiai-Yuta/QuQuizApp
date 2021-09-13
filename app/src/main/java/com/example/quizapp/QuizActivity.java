@@ -7,18 +7,12 @@ import androidx.fragment.app.FragmentManager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,6 +29,7 @@ public class QuizActivity extends AppCompatActivity {
     private FragmentManager flagmentManager;
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
@@ -55,12 +50,14 @@ public class QuizActivity extends AppCompatActivity {
 
     /*クイズを表示*/
     public void printQuiz(ArrayList<MainActivity.QuizAtrr> list, int n){
+        String number;
         TextView quiz = findViewById(R.id.quizText);
         quiz.setText(list.get(n).quiz_text);
 
         //問題番号を更新
+        number = n+1 + "/" + QUIZ_LIST.size();
         TextView text = findViewById(R.id.quizCountText_quiz);
-        text.setText(n+1 + "/" + QUIZ_LIST.size());
+        text.setText(number);
     }
 
     /**丸ボタンをタップされたときの挙動**/
@@ -83,7 +80,7 @@ public class QuizActivity extends AppCompatActivity {
     /**バツボタンをタップされたときの挙動**/
     public void tapCrossButton(View view){
         //正誤判定
-        if("circle".equals(QUIZ_LIST.get(COUNT).answer_text)) {
+        if("cross".equals(QUIZ_LIST.get(COUNT).answer_text)) {
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
             dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
@@ -97,22 +94,8 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    /**次へボタンをタップされたときの挙動**/
-    public void tapNextQuizButton(View view){
-        LinearLayout judge = findViewById(R.id.judgeViewLayout);
-        for(int i=0; i<judge.getChildCount(); i++){
-            judge.getChildAt(i).setVisibility(View.INVISIBLE);
-        }
-        judge.setVisibility(View.INVISIBLE);
-        printQuiz(QUIZ_LIST, ++COUNT);
-    }
-
     private boolean endCheck(int count, int total) {
-        if(count >= total){
-            return false;
-        }
-
-        return true;
+        return count < total;
     }
 
     private void toEndActivity(){
@@ -122,11 +105,11 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public static class CorrectDialogFragment extends DialogFragment{
-        static int count;
+        int count;
         AlertDialog dialog;
         AlertDialog.Builder alert;
         View alertView;
-        boolean endFlag = false;
+        boolean endFlag;
 
         CorrectDialogFragment(int count, boolean endFlag){
             this.count = count;
@@ -153,22 +136,18 @@ public class QuizActivity extends AppCompatActivity {
 
             Button next = alertView.findViewById(R.id.nextButton);
             if(endFlag) {
-                next.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Log.d("debug", "bag1 clicked");
-                        printNextQuiz(count);
-                        getDialog().dismiss();
-                    }
+                next.setOnClickListener(v -> {
+                    Log.d("debug", "bag1 clicked");
+                    printNextQuiz(count);
+                    getDialog().dismiss();
                 });
             }
             else{
                 next.setText("結果発表");
-                next.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        QuizActivity Activity = (QuizActivity) getActivity();
-                        getDialog().dismiss();
-                        Activity.toEndActivity();
-                    }
+                next.setOnClickListener(v -> {
+                    QuizActivity Activity = (QuizActivity) getActivity();
+                    getDialog().dismiss();
+                    Activity.toEndActivity();
                 });
             }
 
@@ -189,11 +168,11 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public static class IncorrectDialogFragment extends DialogFragment{
-        static int count;
+        int count;
         AlertDialog dialog;
         AlertDialog.Builder alert;
         View alertView;
-        boolean endFlag = false;
+        boolean endFlag;
 
         IncorrectDialogFragment(int count, boolean endFlag){
             this.count = count;
@@ -220,22 +199,18 @@ public class QuizActivity extends AppCompatActivity {
 
             Button next = alertView.findViewById(R.id.nextButton);
             if(endFlag) {
-                next.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Log.d("debug", "bag1 clicked");
-                        printNextQuiz(count);
-                        getDialog().dismiss();
-                    }
+                next.setOnClickListener(v -> {
+                    Log.d("debug", "bag1 clicked");
+                    printNextQuiz(count);
+                    getDialog().dismiss();
                 });
             }
             else{
                 next.setText("結果発表");
-                next.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        QuizActivity Activity = (QuizActivity) getActivity();
-                        getDialog().dismiss();
-                        Activity.toEndActivity();
-                    }
+                next.setOnClickListener(v -> {
+                    QuizActivity Activity = (QuizActivity) getActivity();
+                    getDialog().dismiss();
+                    Activity.toEndActivity();
                 });
             }
 
