@@ -5,22 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class QuizActivity extends AppCompatActivity {
-    //マルバツの選択を格納する
+    //問題番号
     private int COUNT = 0;
+    //総問題数
     private static int TOTAL_NUMBER = 0;
+    //正答数
+    private int NUMBER_OF_CORRECT_ANSWER = 0;
 
     public static String SELECT_MESSAGE = "com.example.quizapp.MESSAGE";
     public static ArrayList<MainActivity.QuizAtrr> QUIZ_LIST = new ArrayList<>();
@@ -29,6 +33,7 @@ public class QuizActivity extends AppCompatActivity {
     private FragmentManager flagmentManager;
 
     @Override
+    //「QUIZ_LISTの型が未チェック」の警告を無視
     @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,26 +55,29 @@ public class QuizActivity extends AppCompatActivity {
 
     /*クイズを表示*/
     public void printQuiz(ArrayList<MainActivity.QuizAtrr> list, int n){
-        String number;
+        String numberText;
         TextView quiz = findViewById(R.id.quizText);
         quiz.setText(list.get(n).quiz_text);
 
         //問題番号を更新
-        number = n+1 + "/" + QUIZ_LIST.size();
+        numberText = n+1 + "/" + QUIZ_LIST.size();
         TextView text = findViewById(R.id.quizCountText_quiz);
-        text.setText(number);
+        text.setText(numberText);
     }
 
     /**丸ボタンをタップされたときの挙動**/
     public void tapCircleButton(View view){
         //正誤判定
         if("circle".equals(QUIZ_LIST.get(COUNT).answer_text)) {
+            //正解
+            NUMBER_OF_CORRECT_ANSWER++;
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
             dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
-            dialogFragment.show(flagmentManager, "test alert dialog");
+            dialogFragment.show(flagmentManager, "correct dialog");
         }
         else{
+            //不正解
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
             dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
@@ -81,12 +89,15 @@ public class QuizActivity extends AppCompatActivity {
     public void tapCrossButton(View view){
         //正誤判定
         if("cross".equals(QUIZ_LIST.get(COUNT).answer_text)) {
+            //正解
+            NUMBER_OF_CORRECT_ANSWER++;
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
             dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
-            dialogFragment.show(flagmentManager, "test alert dialog");
+            dialogFragment.show(flagmentManager, "correct dialog");
         }
         else{
+            //不正解
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
             dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
@@ -102,6 +113,8 @@ public class QuizActivity extends AppCompatActivity {
     //EndActivityに切り替える
     private void toEndActivity(){
         Intent intent = new Intent(this, EndActivity.class);
+        intent.putExtra("TOTAL_NUMBER", TOTAL_NUMBER);
+        intent.putExtra("NUMBER_OF_CORRECT_ANSWER", NUMBER_OF_CORRECT_ANSWER);
         //end画面に切り替え
         startActivity(intent);
     }
@@ -114,6 +127,7 @@ public class QuizActivity extends AppCompatActivity {
         int count;      //次の問題番号
         boolean endFlag;    //クイズの終了を判定
 
+        //コンストラクタ
         CorrectDialogFragment(int count, boolean endFlag){
             this.count = count;
             this.endFlag = endFlag;
@@ -121,6 +135,8 @@ public class QuizActivity extends AppCompatActivity {
 
         @Override
         @NonNull
+        //「AlertDialogの親Viewが存在しない」警告を無視
+        @SuppressLint("InflateParams")
         public Dialog onCreateDialog(Bundle savedInstanceState){
             alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("正解！");
@@ -145,9 +161,8 @@ public class QuizActivity extends AppCompatActivity {
             //クイズが続く場合
             if(endFlag) {
                 next.setOnClickListener(v -> {
-                    Log.d("debug", "bag1 clicked");
                     printNextQuiz(count);
-                    getDialog().dismiss();
+                    Objects.requireNonNull(getDialog()).dismiss();
                 });
             }
             //クイズが終了する場合
@@ -155,7 +170,7 @@ public class QuizActivity extends AppCompatActivity {
                 next.setText("結果発表");
                 next.setOnClickListener(v -> {
                     QuizActivity Activity = (QuizActivity) getActivity();
-                    getDialog().dismiss();
+                    Objects.requireNonNull(getDialog()).dismiss();
                     //EndActivityへ切り替える
                     Activity.toEndActivity();
                 });
@@ -192,6 +207,8 @@ public class QuizActivity extends AppCompatActivity {
 
         @Override
         @NonNull
+        //「AlertDialogの親Viewが存在しない」警告を無視
+        @SuppressLint("InflateParams")
         public Dialog onCreateDialog(Bundle savedInstanceState){
             alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("不正解");
@@ -216,9 +233,8 @@ public class QuizActivity extends AppCompatActivity {
             //クイズが続く場合
             if(endFlag) {
                 next.setOnClickListener(v -> {
-                    Log.d("debug", "bag1 clicked");
                     printNextQuiz(count);
-                    getDialog().dismiss();
+                    Objects.requireNonNull(getDialog()).dismiss();
                 });
             }
             //クイズが終了する場合
@@ -226,7 +242,7 @@ public class QuizActivity extends AppCompatActivity {
                 next.setText("結果発表");
                 next.setOnClickListener(v -> {
                     QuizActivity Activity = (QuizActivity) getActivity();
-                    getDialog().dismiss();
+                    Objects.requireNonNull(getDialog()).dismiss();
                     //EndActivityへ切り替える
                     Activity.toEndActivity();
                 });
