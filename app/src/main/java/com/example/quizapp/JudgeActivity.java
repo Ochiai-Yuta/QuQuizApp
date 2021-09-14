@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 public class JudgeActivity extends AppCompatActivity {
 
@@ -30,17 +29,19 @@ public class JudgeActivity extends AppCompatActivity {
             tmp.setVisibility(View.INVISIBLE);
         }
 
-        //SELECT_MESSAGE==circleの場合、丸を表示
+
+        View paint;
         if(messageCircle.equals(message)){
-            View paint = findViewById(R.id.circlePaint);
+            //SELECT_MESSAGE==circleの場合、丸を表示
+            paint = findViewById(R.id.circlePaint);
+            paint.setVisibility(View.VISIBLE);
+        }
+        if(messageCross.equals(message)){
+            //SELECT_MESSAGE==crossの場合、バツを表示
+            paint = findViewById(R.id.crossPaint);
             paint.setVisibility(View.VISIBLE);
         }
 
-        //SELECT_MESSAGE==crossの場合、バツを表示
-        if(messageCross.equals(message)){
-            View paint = findViewById(R.id.crossPaint);
-            paint.setVisibility(View.VISIBLE);
-        }
     }
 
     //戻るボタンの無効化

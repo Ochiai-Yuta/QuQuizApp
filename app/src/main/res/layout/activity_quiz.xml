@@ -88,4 +88,44 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/judgeViewLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quizStatusLayout_quiz">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="424dp">
+
+            <com.example.quizapp.CirclePaint
+                android:id="@+id/circlePaint2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible" />
+
+            <com.example.quizapp.CrossPaint
+                android:id="@+id/crossPaint2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="66dp" />
+
+        <Button
+            android:id="@+id/nextQuizButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/next_button" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
