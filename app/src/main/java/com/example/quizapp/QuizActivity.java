@@ -10,12 +10,16 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 public class QuizActivity extends AppCompatActivity {
@@ -25,12 +29,29 @@ public class QuizActivity extends AppCompatActivity {
     private static int TOTAL_NUMBER = 0;
     //正答数
     private int NUMBER_OF_CORRECT_ANSWER = 0;
-
+    //問題を読み込む
     public static String SELECT_MESSAGE = "com.example.quizapp.MESSAGE";
     public static ArrayList<MainActivity.QuizAtrr> QUIZ_LIST = new ArrayList<>();
-
+    //ダイアログ
     private DialogFragment dialogFragment;
     private FragmentManager flagmentManager;
+
+    //タイマー
+    private TextView timerText;
+    private final SimpleDateFormat dataFormat =
+            new SimpleDateFormat("mm:ss.S", Locale.US);
+    private int TIME_COUNT, period;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            TIME_COUNT++;
+            timerText.setText(dataFormat.
+                    format(TIME_COUNT *period));
+            handler.postDelayed(this, period);
+        }
+    };
 
     @Override
     //「QUIZ_LISTの型が未チェック」の警告を無視
@@ -46,6 +67,14 @@ public class QuizActivity extends AppCompatActivity {
         TOTAL_NUMBER = QUIZ_LIST.size();
 
         printQuiz(QUIZ_LIST, COUNT);
+
+        //タイマー
+        TIME_COUNT = 0;
+        period = 100;
+        timerText = findViewById(R.id.timerText_quiz);
+        timerText.setText(dataFormat.format(0));
+        //タイマーの開始
+        handler.post(runnable);
     }
 
     //戻るボタンの無効化
@@ -67,40 +96,44 @@ public class QuizActivity extends AppCompatActivity {
 
     /**丸ボタンをタップされたときの挙動**/
     public void tapCircleButton(View view){
+        //タイマーの一時停止
+        handler.removeCallbacks(runnable);
         //正誤判定
         if("circle".equals(QUIZ_LIST.get(COUNT).answer_text)) {
             //正解
             NUMBER_OF_CORRECT_ANSWER++;
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
+            dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER), handler, runnable);
             dialogFragment.show(flagmentManager, "correct dialog");
         }
         else{
             //不正解
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
+            dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER), handler, runnable);
             dialogFragment.show(flagmentManager, "incorrect dialog");
         }
     }
 
     /**バツボタンをタップされたときの挙動**/
     public void tapCrossButton(View view){
+        //タイマーの一時停止
+        handler.removeCallbacks(runnable);
         //正誤判定
         if("cross".equals(QUIZ_LIST.get(COUNT).answer_text)) {
             //正解
             NUMBER_OF_CORRECT_ANSWER++;
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
+            dialogFragment = new CorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER), handler, runnable);
             dialogFragment.show(flagmentManager, "correct dialog");
         }
         else{
             //不正解
             //AlertDialogの表示
             flagmentManager = getSupportFragmentManager();
-            dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER));
+            dialogFragment = new IncorrectDialogFragment(++COUNT, endCheck(COUNT, TOTAL_NUMBER), handler, runnable);
             dialogFragment.show(flagmentManager, "incorrect dialog");
         }
     }
@@ -115,6 +148,7 @@ public class QuizActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EndActivity.class);
         intent.putExtra("TOTAL_NUMBER", TOTAL_NUMBER);
         intent.putExtra("NUMBER_OF_CORRECT_ANSWER", NUMBER_OF_CORRECT_ANSWER);
+        intent.putExtra("TIME_COUNT", TIME_COUNT);
         //end画面に切り替え
         startActivity(intent);
     }
@@ -123,14 +157,18 @@ public class QuizActivity extends AppCompatActivity {
     public static class CorrectDialogFragment extends DialogFragment{
         AlertDialog dialog;
         AlertDialog.Builder alert;
-        View alertView;
-        int count;      //次の問題番号
-        boolean endFlag;    //クイズの終了を判定
+        private View alertView;
+        private final int count;      //次の問題番号
+        private final boolean endFlag;    //クイズの終了を判定
+        private final Handler handler;  //タイマーのハンドラ
+        private final Runnable runnable;    //タイマー用の別スレッド
 
         //コンストラクタ
-        CorrectDialogFragment(int count, boolean endFlag){
+        CorrectDialogFragment(int count, boolean endFlag, Handler handler, Runnable runnable){
             this.count = count;
             this.endFlag = endFlag;
+            this.handler = handler;
+            this.runnable = runnable;
         }
 
         @Override
@@ -161,6 +199,8 @@ public class QuizActivity extends AppCompatActivity {
             //クイズが続く場合
             if(endFlag) {
                 next.setOnClickListener(v -> {
+                    //タイマーの再開
+                    handler.post(runnable);
                     printNextQuiz(count);
                     Objects.requireNonNull(getDialog()).dismiss();
                 });
@@ -197,12 +237,17 @@ public class QuizActivity extends AppCompatActivity {
         AlertDialog dialog;
         AlertDialog.Builder alert;
         View alertView;
-        int count;      //次の問題番号
-        boolean endFlag;    //クイズの終了を判定
+        private final int count;      //次の問題番号
+        private final boolean endFlag;    //クイズの終了を判定
+        private final Handler handler;  //タイマーのハンドラ
+        private final Runnable runnable;    //タイマー用の別スレッド
 
-        IncorrectDialogFragment(int count, boolean endFlag){
+        //コンストラクタ
+        IncorrectDialogFragment(int count, boolean endFlag, Handler handler, Runnable runnable){
             this.count = count;
             this.endFlag = endFlag;
+            this.handler = handler;
+            this.runnable = runnable;
         }
 
         @Override
@@ -232,6 +277,8 @@ public class QuizActivity extends AppCompatActivity {
             Button next = alertView.findViewById(R.id.nextButton);
             //クイズが続く場合
             if(endFlag) {
+                //タイマーの再開
+                handler.post(runnable);
                 next.setOnClickListener(v -> {
                     printNextQuiz(count);
                     Objects.requireNonNull(getDialog()).dismiss();
